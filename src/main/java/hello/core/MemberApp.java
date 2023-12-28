@@ -3,16 +3,20 @@ package hello.core;
 import hello.core.member.Grade;
 import hello.core.member.Member;
 import hello.core.member.MemberSerivce;
-import hello.core.member.MemberServiceImpl;
-
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 public class MemberApp {
     public static void main(String[] args) {
-        MemberSerivce memberSerivce = new MemberServiceImpl();
+// AppConfig appConfig = new AppConfig();
+// MemberService memberService = appConfig.memberService();
+        ApplicationContext applicationContext = new
+                AnnotationConfigApplicationContext(AppConfig.class);
+        MemberSerivce memberService =
+                applicationContext.getBean("memberService", MemberSerivce.class);
         Member member = new Member(1L, "memberA", Grade.VIP);
-        memberSerivce.join(member);
-
-        Member findMember = memberSerivce.findMember(1L);
-        System.out.println("new member = "+member.getName());
-        System.out.println("find member  "+findMember.getName());
+        memberService.join(member);
+        Member findMember = memberService.findMember(1L);
+        System.out.println("new member = " + member.getName());
+        System.out.println("find Member = " + findMember.getName());
     }
 }

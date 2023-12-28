@@ -2,19 +2,26 @@ package hello.core;
 
 import hello.core.Order.Order;
 import hello.core.Order.OrderService;
-import hello.core.Order.OrderServiceImpl;
 import hello.core.member.Grade;
 import hello.core.member.Member;
 import hello.core.member.MemberSerivce;
-import hello.core.member.MemberServiceImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 public class OrderApp {
     public static void main(String[] args) {
-        MemberSerivce memberSerivce = new MemberServiceImpl();
-        OrderService orderService = new OrderServiceImpl();
+//        AppConfig appConfig = new AppConfig();
+//        MemberSerivce memberSerivce = appConfig.memberService();
+//        OrderService orderService = appConfig.orderService();
 
-        Long memberId = 1L;
+
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+        MemberSerivce memberService = applicationContext.getBean("memberService",MemberSerivce.class);
+        OrderService orderService =  applicationContext.getBean("orderService", OrderService.class);
+
+        long memberId = 1L;
         Member member = new Member(memberId, "memberA", Grade.VIP);
-        memberSerivce.join(member);
+        memberService.join(member);
 
         Order order = orderService.createOrder(memberId, "itemA", 10000);
         System.out.println("order = "+order);
